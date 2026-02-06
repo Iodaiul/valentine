@@ -4,173 +4,144 @@
 <meta charset="UTF-8">
 <title>Valentine 💙🤍</title>
 <style>
-/* Fundal + font */
-body {
-    margin: 0;
-    height: 100vh;
-    background: linear-gradient(135deg, #8ec5fc, #e0c3fc);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-family: 'Poppins', sans-serif;
-    overflow: hidden;
-}
-
-/* Container mai mare */
-.container {
-    background: rgba(255,255,255,0.95);
-    padding: 40px;
-    border-radius: 25px;
-    text-align: center;
-    width: 500px;
-    box-shadow: 0 25px 50px rgba(0,0,0,0.2);
-    position: relative;
-    z-index: 10;
-}
-
-/* Textul mare */
-h1 {
-    color: #405de6;
-    font-size: 24px;
-}
-
-.name {
-    font-size: 30px;
-    font-weight: bold;
-    animation: glow 1.5s infinite alternate;
-}
-
-@keyframes glow {
-    from { color: #405de6; }
-    to { color: #6a11cb; }
-}
-
-/* GIF principal pe pagina cu Da/ Nu */
-#mainGif {
-    width: 300px;
-    margin: 20px auto;
-    display: block;
-}
-
-/* Butoane mari */
-button {
-    border: none;
-    padding: 20px 35px;
-    font-size: 22px;
-    border-radius: 30px;
-    cursor: pointer;
-    margin: 20px;
-    transition: 0.3s;
-}
-
-#yes {
-    background: #405de6;
-    color: white;
-}
-
-#no {
-    background: #ddd;
-    color: #555;
-}
-
-/* Text final */
-.finalText {
-    display: none;
-    font-size: 28px;
-    margin-bottom: 20px;
-    color: #405de6;
-}
-
-/* GIF-uri final */
-.finalGif {
-    width: 150px;
-    margin: 0 20px;
-}
-
-/* Container GIF-uri final */
-.finalGifsContainer {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-/* Inimi care cad */
-.heart {
-    position: fixed;
-    top: -10px;
-    font-size: 20px;
-    animation: fall linear forwards;
-}
-
-@keyframes fall {
-    to {
-        transform: translateY(110vh);
-        opacity: 0;
+    body {
+        margin: 0;
+        font-family: 'Comic Sans MS', cursive;
+        background: linear-gradient(135deg, #cce6ff, #ffffff);
+        overflow: hidden;
     }
-}
+
+    .container {
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+    }
+
+    h1 {
+        font-size: 3em;
+        color: #3b6cff;
+        margin-bottom: 20px;
+    }
+
+    .gif {
+        width: 300px;
+        margin-bottom: 30px;
+    }
+
+    .buttons {
+        display: flex;
+        gap: 50px;
+        position: relative;
+    }
+
+    button {
+        font-size: 2.5em;
+        padding: 20px 50px;
+        border-radius: 20px;
+        border: none;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+
+    #yes {
+        background: #4da6ff;
+        color: white;
+    }
+
+    #no {
+        background: #ff4d6d;
+        color: white;
+    }
+
+    /* cursor fake hand */
+    .hand {
+        position: absolute;
+        width: 60px;
+        pointer-events: none;
+        display: none;
+        z-index: 999;
+    }
+
+    .hidden {
+        display: none;
+    }
+
+    .second h2 {
+        font-size: 3em;
+        color: #3b6cff;
+        margin-bottom: 20px;
+    }
+
+    .gifs-row {
+        display: flex;
+        gap: 40px;
+        margin-top: 20px;
+    }
+
+    .gifs-row img {
+        width: 220px;
+    }
 </style>
 </head>
 <body>
 
-<div class="container" id="mainContainer">
-    <!-- Text și GIF principal -->
-    <h1>Vrei să fii my Valentines<br><span class="name">Adelina</span>? 💙🤍</h1>
-    <img id="mainGif" src="https://media.tenor.com/v0DkaIVljHsAAAAC/cute-milk-and-mocha-sad-please.gif" alt="milk and mocha cute">
+<div class="container" id="first">
+    <h1>Vrei să-mi fii Valentine's anul acesta? 💙🤍</h1>
 
-    <!-- Butoanele mari -->
-    <div id="buttonsContainer">
-        <button id="yes">Da ❤️</button>
-        <button id="no">Nu ❌</button>
+    <img class="gif" src="https://media1.tenor.com/m/SU5k1XOLwukAAAAd/cute-milk-and-mocha.gif">
+
+    <div class="buttons">
+        <button id="yes">Da</button>
+        <button id="no">Nu</button>
     </div>
+</div>
 
-    <!-- Text final -->
-    <div class="finalText" id="finalText">Inca te plac mult Adelina, tu ce simti ? 💙🤍</div>
+<img src="https://cdn-icons-png.flaticon.com/512/5454/5454827.png" class="hand" id="hand">
 
-    <!-- GIF-uri final -->
-    <div class="finalGifsContainer" id="finalGifsContainer" style="display:none;">
-        <img class="finalGif" src="https://media.tenor.com/vsCuJBB3YQ8AAAAC/anime-kiss.gif" alt="kiss gif">
-        <img class="finalGif" src="https://media.tenor.com/uoYvJuLr2lIAAAAC/milk-mocha-bear.gif" alt="milk mocha bear gif">
+<div class="container second hidden" id="second">
+    <h2>Încă te plac mult Adelina, tu ce simți? 🤍💙</h2>
+
+    <div class="gifs-row">
+        <img src="https://media1.tenor.com/m/1nIDXbABxgsAAAAd/gif-gifkk.gif">
+        <img src="https://media1.tenor.com/m/DDRz38sfMSIAAAAd/milk-mocha-bear.gif">
     </div>
 </div>
 
 <script>
-// Mouse „trage” cursorul când se apropie de „Nu”
 const noBtn = document.getElementById("no");
-noBtn.addEventListener("mouseenter", (e) => {
-    const distance = 50; // cât de mult tragem cursorul
-    const dx = (Math.random() * 2 - 1) * distance;
-    const dy = (Math.random() * 2 - 1) * distance;
-    window.scrollBy(dx, dy); // mișcăm vizual pagina puțin
+const hand = document.getElementById("hand");
+
+document.addEventListener("mousemove", (e) => {
+    const rect = noBtn.getBoundingClientRect();
+    const dist = Math.hypot(
+        e.clientX - (rect.left + rect.width/2),
+        e.clientY - (rect.top + rect.height/2)
+    );
+
+    if (dist < 120) {
+        hand.style.display = "block";
+        hand.style.left = e.clientX + "px";
+        hand.style.top = e.clientY + "px";
+
+        // trage mouse-ul virtual
+        window.scrollBy(
+            (Math.random() - 0.5) * 80,
+            (Math.random() - 0.5) * 80
+        );
+    } else {
+        hand.style.display = "none";
+    }
 });
 
-// Buton Da
-const yesBtn = document.getElementById("yes");
-const buttonsContainer = document.getElementById("buttonsContainer");
-const finalText = document.getElementById("finalText");
-const finalGifs = document.getElementById("finalGifsContainer");
-
-yesBtn.addEventListener("click", () => {
-    // dispar butoanele și GIF-ul principal
-    buttonsContainer.style.display = "none";
-    document.getElementById("mainGif").style.display = "none";
-
-    // afișăm textul final și GIF-urile
-    finalText.style.display = "block";
-    finalGifs.style.display = "flex";
-});
-
-// Inimi care cad
-setInterval(() => {
-    const heart = document.createElement("div");
-    heart.className = "heart";
-    heart.innerHTML = Math.random() > 0.5 ? "💙" : "🤍";
-    heart.style.left = Math.random() * 100 + "vw";
-    heart.style.animationDuration = Math.random() * 3 + 3 + "s";
-    document.body.appendChild(heart);
-
-    setTimeout(() => heart.remove(), 6000);
-}, 300);
-
+document.getElementById("yes").onclick = () => {
+    document.getElementById("first").classList.add("hidden");
+    document.getElementById("second").classList.remove("hidden");
+};
 </script>
+
 </body>
 </html>
