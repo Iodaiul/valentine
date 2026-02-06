@@ -16,7 +16,7 @@
         background: linear-gradient(135deg, #cce6ff, #ffffff);
         overflow: hidden;
         height: 100vh;
-        cursor: none !important; /* Ascunde cursorul default */
+        cursor: none !important;
     }
 
     .container {
@@ -137,34 +137,34 @@
         }
     }
 
-    /* CUSTOM CURSOR CU IMAGINEA TA DE INIMA */
+    /* CUSTOM CURSOR CU POZA TA LOCALĂ */
     .fake-cursor {
-        position: fixed;
-        width: 60px; /* Dimensiune potrivită pentru imaginea ta */
-        height: 52px;
-        pointer-events: none;
-        z-index: 9999;
-        /* Centrare perfectă a cursorului pe vârful inimii */
-        transform: translate(-50%, -50%);
-        /* Folosește imaginea ta ca fundal */
-        background-image: url('https://i.ibb.co/hMs1k45S/Screenshot-20250114-104250.png');
-        /* Asigură că întreaga imagine este vizibilă și scalată corect */
-        background-size: contain;
-        background-repeat: no-repeat;
-        /* Elimină orice fundal în plus - crucial pentru forma de inimă! */
-        background-color: transparent !important;
-        /* Elimină orice bordură sau umbră veche */
-        border: none;
-        border-radius: 0;
-        box-shadow: none;
-        /* Asigură că elementul nu are conținut în plus */
-        overflow: visible;
-    }
+    position: fixed;
+    width: 80px;
+    height: 75px;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
 
-    /* Șterge div-urile vechi din cursor (jumătățile cu emoji-uri) */
-    .cursor-left, .cursor-right {
-        display: none;
-    }
+    /* Imaginea ta */
+    background-image: url('file:///C:/Users/Iodaiul/Desktop/image.webp');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    /* TĂIEREA ÎN FORMĂ DE INIMĂ */
+    -webkit-mask-image: url("https://upload.wikimedia.org/wikipedia/commons/4/49/Heart_corazón.svg");
+    -webkit-mask-size: contain;
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+
+    mask-image: url("https://upload.wikimedia.org/wikipedia/commons/4/49/Heart_corazón.svg");
+    mask-size: contain;
+    mask-repeat: no-repeat;
+    mask-position: center;
+
+    background-color: transparent;
+}
 </style>
 </head>
 <body>
@@ -199,19 +199,17 @@
 // ========== INIMOARE CARE CAD (MAI PUTINE, DOAR ALB și ALBASTRU) ==========
 function createHearts() {
     const heartsContainer = document.getElementById('heartsContainer');
-    // DOAR inimi albe și albastre
     const heartEmojis = ['💙', '🤍'];
     
-    // MAI PUTINE inimi (25 în loc de 50)
     for (let i = 0; i < 25; i++) {
         const heart = document.createElement('div');
         heart.className = 'heart';
         heart.textContent = heartEmojis[Math.floor(Math.random() * heartEmojis.length)];
         heart.style.left = Math.random() * 100 + 'vw';
-        heart.style.fontSize = (Math.random() * 15 + 20) + 'px'; // Mai mici
-        heart.style.opacity = Math.random() * 0.4 + 0.3; // Mai transparente
-        heart.style.animationDuration = (Math.random() * 6 + 4) + 's'; // Mai lente
-        heart.style.animationDelay = Math.random() * 3 + 's'; // Delay mai mic
+        heart.style.fontSize = (Math.random() * 15 + 20) + 'px';
+        heart.style.opacity = Math.random() * 0.4 + 0.3;
+        heart.style.animationDuration = (Math.random() * 6 + 4) + 's';
+        heart.style.animationDelay = Math.random() * 3 + 's';
         heartsContainer.appendChild(heart);
     }
 }
@@ -225,21 +223,18 @@ const yesBtn = document.getElementById('yes');
 
 let mouseX = window.innerWidth / 2;
 let mouseY = window.innerHeight / 2;
-let noBtnX = 150; // Poziție inițială
+let noBtnX = 150;
 let noBtnY = 0;
 let isRunningAway = false;
 
-// LIMITE REDUSE CU 20%
-let maxMoveX = window.innerWidth * 0.32; // 40% -> 32% (reducere 20%)
-let maxMoveY = window.innerHeight * 0.24; // 30% -> 24% (reducere 20%)
+let maxMoveX = window.innerWidth * 0.32;
+let maxMoveY = window.innerHeight * 0.24;
 
-// Actualizează poziția butonului "Nu"
 function updateNoBtnPosition() {
     noBtn.style.left = `${noBtnX}px`;
     noBtn.style.top = `${noBtnY}px`;
 }
 
-// Blochează butonul "Nu" complet
 noBtn.addEventListener('click', (e) => {
     e.preventDefault();
     e.stopImmediatePropagation();
@@ -258,53 +253,40 @@ noBtn.addEventListener('mouseup', (e) => {
     return false;
 });
 
-// Cursor care urmărește mouse-ul
 document.addEventListener('mousemove', (e) => {
     mouseX = e.clientX;
     mouseY = e.clientY;
     
-    // Actualizează cursorul fals (INIMA TA)
     fakeCursor.style.left = mouseX + 'px';
     fakeCursor.style.top = mouseY + 'px';
     
-    // Verifică distanța față de butonul "Nu"
     const btnRect = noBtn.getBoundingClientRect();
     const btnCenterX = btnRect.left + btnRect.width / 2;
     const btnCenterY = btnRect.top + btnRect.height / 2;
     
     const dist = Math.hypot(mouseX - btnCenterX, mouseY - btnCenterY);
     
-    // Dacă cursorul este prea aproape (130px), fuge!
     if (dist < 130) {
         isRunningAway = true;
         
-        // Calculează unghiul
         const angle = Math.atan2(mouseY - btnCenterY, mouseX - btnCenterX);
-        
-        // Forță de fugă (mai mare cu cât e mai aproape)
         const force = 180 - dist;
         
-        // Mișcare în direcția opusă
         const moveX = Math.cos(angle + Math.PI) * (force / 2);
         const moveY = Math.sin(angle + Math.PI) * (force / 2);
         
-        // Aplică mișcarea CU LIMITELE REDUSE
         noBtnX += moveX;
         noBtnY += moveY;
         
-        // APLICĂ LIMITELE REDUSE
         noBtnX = Math.max(-maxMoveX, Math.min(maxMoveX, noBtnX));
         noBtnY = Math.max(-maxMoveY, Math.min(maxMoveY, noBtnY));
         
-        // Actualizează poziția
         updateNoBtnPosition();
         
-        // Mișcare aleatorie mică pentru a fi imprevizibil
         if (dist < 90) {
             noBtnX += (Math.random() - 0.5) * 60;
             noBtnY += (Math.random() - 0.5) * 60;
             
-            // Reaplică limitele după mișcarea aleatorie
             noBtnX = Math.max(-maxMoveX, Math.min(maxMoveX, noBtnX));
             noBtnY = Math.max(-maxMoveY, Math.min(maxMoveY, noBtnY));
             
@@ -315,17 +297,14 @@ document.addEventListener('mousemove', (e) => {
     }
 });
 
-// Butonul "Da" funcționează normal
 yesBtn.onclick = () => {
     document.getElementById("first").classList.add("hidden");
     document.getElementById("second").classList.remove("hidden");
     
-    // Adaugă câteva inimi extra când dă click pe "Da"
     for (let i = 0; i < 15; i++) {
         setTimeout(() => {
             const heart = document.createElement('div');
             heart.className = 'heart';
-            // Doar alb și albastru
             heart.textContent = Math.random() > 0.5 ? '💙' : '🤍';
             heart.style.left = Math.random() * 100 + 'vw';
             heart.style.fontSize = '28px';
@@ -333,26 +312,22 @@ yesBtn.onclick = () => {
             heart.style.animationDuration = '4s';
             document.getElementById('heartsContainer').appendChild(heart);
             
-            // Șterge inima după ce cade
             setTimeout(() => heart.remove(), 4000);
         }, i * 150);
     }
 };
 
-// Resetează poziția butonului "Nu" dacă iese prea aproape de limite
 setInterval(() => {
     const thresholdX = maxMoveX * 0.85;
     const thresholdY = maxMoveY * 0.85;
     
     if (Math.abs(noBtnX) > thresholdX || Math.abs(noBtnY) > thresholdY) {
-        // Readuce butonul mai aproape de centru
         noBtnX *= 0.7;
         noBtnY *= 0.7;
         updateNoBtnPosition();
     }
 }, 2000);
 
-// Animație buton "Nu" subtilă
 setInterval(() => {
     if (!isRunningAway) {
         noBtn.style.transform = 'scale(1.02)';
@@ -362,13 +337,10 @@ setInterval(() => {
     }
 }, 3000);
 
-// Initializează poziția
 updateNoBtnPosition();
 
-// Ascunde cursorul real
 document.body.style.cursor = 'none';
 
-// Previne meniul contextual pe butonul "Nu"
 document.addEventListener('contextmenu', (e) => {
     if (e.target.id === 'no') {
         e.preventDefault();
@@ -376,13 +348,10 @@ document.addEventListener('contextmenu', (e) => {
     }
 });
 
-// Resize handler - recalculează limitele
 window.addEventListener('resize', () => {
-    // Recalculează limitele cu 20% reducere
     maxMoveX = window.innerWidth * 0.32;
     maxMoveY = window.innerHeight * 0.24;
     
-    // Ajustează poziția curentă la noile limite
     noBtnX = Math.max(-maxMoveX, Math.min(maxMoveX, noBtnX));
     noBtnY = Math.max(-maxMoveY, Math.min(maxMoveY, noBtnY));
     
