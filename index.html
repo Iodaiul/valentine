@@ -4,39 +4,51 @@
 <meta charset="UTF-8">
 <title>Valentine 💙🤍</title>
 <style>
-    body {
+    * {
         margin: 0;
-        font-family: 'Comic Sans MS', cursive;
-        background: linear-gradient(135deg, #cce6ff, #ffffff);
-        overflow: hidden;
+        padding: 0;
+        box-sizing: border-box;
         user-select: none;
     }
 
-    .container {
-        width: 100vw;
+    body {
+        font-family: 'Comic Sans MS', cursive;
+        background: linear-gradient(135deg, #cce6ff, #ffffff);
+        overflow: hidden;
         height: 100vh;
+        cursor: none !important;
+    }
+
+    .container {
+        width: 100%;
+        height: 100%;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
         text-align: center;
+        position: relative;
     }
 
     h1 {
         font-size: 3em;
         color: #3b6cff;
-        margin-bottom: 20px;
+        margin-bottom: 30px;
+        padding: 0 20px;
+        z-index: 10;
     }
 
     .gif {
         width: 300px;
-        margin-bottom: 30px;
+        margin-bottom: 40px;
+        z-index: 10;
     }
 
     .buttons {
         display: flex;
         gap: 50px;
         position: relative;
+        z-index: 100;
     }
 
     button {
@@ -44,9 +56,9 @@
         padding: 20px 50px;
         border-radius: 20px;
         border: none;
-        cursor: pointer;
-        transition: 0.2s;
         position: relative;
+        transition: transform 0.05s linear !important;
+        z-index: 1000;
     }
 
     #yes {
@@ -58,12 +70,12 @@
     #no {
         background: #ff4d6d;
         color: white;
+        position: absolute;
         cursor: not-allowed;
-        transition: transform 0.1s linear;
     }
 
     .hidden {
-        display: none;
+        display: none !important;
     }
 
     .second h2 {
@@ -81,18 +93,45 @@
     .gifs-row img {
         width: 220px;
     }
+
+    /* Cursor fals */
+    .fake-cursor {
+        position: fixed;
+        width: 30px;
+        height: 30px;
+        background: url('https://cdn-icons-png.flaticon.com/512/5454/5454827.png') center/contain no-repeat;
+        pointer-events: none;
+        z-index: 9999;
+        transform: translate(-50%, -50%);
+    }
+
+    /* Container limită pentru butonul "Nu" */
+    .escape-zone {
+        position: absolute;
+        width: 80vw;
+        height: 60vh;
+        border: 2px dashed rgba(255, 77, 109, 0.3);
+        border-radius: 20px;
+        pointer-events: none;
+        z-index: 1;
+    }
 </style>
 </head>
 <body>
 
+<!-- Cursor fals -->
+<div class="fake-cursor" id="fakeCursor"></div>
+
 <div class="container" id="first">
+    <div class="escape-zone"></div>
+    
     <h1>Vrei să-mi fii Valentine's anul acesta? 💙🤍</h1>
 
     <img class="gif" src="https://media1.tenor.com/m/SU5k1XOLwukAAAAd/cute-milk-and-mocha.gif">
 
     <div class="buttons">
         <button id="yes">Da</button>
-        <button id="no">Nu</button>
+        <!-- Butonul "Nu" este poziționat dinamic prin JS -->
     </div>
 </div>
 
@@ -106,70 +145,136 @@
 </div>
 
 <script>
-const noBtn = document.getElementById("no");
-const yesBtn = document.getElementById("yes");
-const buttonsContainer = document.querySelector('.buttons');
+// Ascunde cursorul real și afișează cursorul fals
+const fakeCursor = document.getElementById('fakeCursor');
+let mouseX = window.innerWidth / 2;
+let mouseY = window.innerHeight / 2;
 
-// Dezactivează complet butonul "Nu"
+// Crează butonul "Nu" dinamic
+const buttonsContainer = document.querySelector('.buttons');
+const noBtn = document.createElement('button');
+noBtn.id = 'no';
+noBtn.textContent = 'Nu';
+buttonsContainer.appendChild(noBtn);
+
+// Poziționează inițial butonul "Nu"
+let noBtnX = 150; // offset față de "Da"
+let noBtnY = 0;
+
+// Dimensiunile zonei de fugă
+const escapeZone = {
+    width: window.innerWidth * 0.8,
+    height: window.innerHeight * 0.6,
+    x: window.innerWidth * 0.1,
+    y: window.innerHeight * 0.2
+};
+
+// Actualizează poziția butonului "Nu"
+function updateNoBtnPosition() {
+    noBtn.style.left = `${noBtnX}px`;
+    noBtn.style.top = `${noBtnY}px`;
+    noBtn.style.transform = `translate(${noBtnX}px, ${noBtnY}px)`;
+}
+
+// Blochează complet butonul "Nu"
 noBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    e.stopPropagation();
+    return false;
+});
+
+noBtn.addEventListener('mousedown', (e) => {
     e.preventDefault();
     e.stopImmediatePropagation();
     return false;
 });
 
-// Face butonul "Nu" să fugă de mouse
+noBtn.addEventListener('mouseup', (e) => {
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    return false;
+});
+
+// Cursor fals care urmărește mouse-ul real
 document.addEventListener('mousemove', (e) => {
-    const rect = noBtn.getBoundingClientRect();
-    const btnCenterX = rect.left + rect.width / 2;
-    const btnCenterY = rect.top + rect.height / 2;
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+    fakeCursor.style.left = mouseX + 'px';
+    fakeCursor.style.top = mouseY + 'px';
     
-    // Distanța dintre cursor și centrul butonului
-    const dist = Math.hypot(e.clientX - btnCenterX, e.clientY - btnCenterY);
+    // Verifică dacă cursorul este aproape de butonul "Nu"
+    const btnRect = noBtn.getBoundingClientRect();
+    const btnCenterX = btnRect.left + btnRect.width / 2;
+    const btnCenterY = btnRect.top + btnRect.height / 2;
     
-    // Dacă mouse-ul este aproape (în raza de 200px)
-    if (dist < 200) {
-        // Calculează direcția de fugă (opus față de mouse)
-        const moveX = (btnCenterX - e.clientX) * 0.3;
-        const moveY = (btnCenterY - e.clientY) * 0.3;
+    const dist = Math.hypot(mouseX - btnCenterX, mouseY - btnCenterY);
+    
+    // Dacă cursorul este prea aproape (250px), fuge!
+    if (dist < 250) {
+        // Calculează direcția de fugă
+        const angle = Math.atan2(mouseY - btnCenterY, mouseX - btnCenterX);
         
-        // Limitează mișcarea la container
-        const containerRect = buttonsContainer.getBoundingClientRect();
-        const newLeft = parseInt(noBtn.style.left || 0) + moveX;
-        const newTop = parseInt(noBtn.style.top || 0) + moveY;
+        // Forță de respingere (mai mare cu cât e mai aproape)
+        const force = 350 - dist; // Valori mai mari = fuge mai departe
         
-        // Asigură-te că butonul rămâne în container
-        if (Math.abs(newLeft) < containerRect.width / 2 - 100 && 
-            Math.abs(newTop) < containerRect.height / 2 - 50) {
-            noBtn.style.transform = `translate(${newLeft}px, ${newTop}px)`;
-            noBtn.style.left = newLeft + 'px';
-            noBtn.style.top = newTop + 'px';
+        // Mișcare în direcția opusă
+        const moveX = Math.cos(angle + Math.PI) * (force / 2);
+        const moveY = Math.sin(angle + Math.PI) * (force / 2);
+        
+        // Aplică mișcarea
+        noBtnX += moveX;
+        noBtnY += moveY;
+        
+        // Ține butonul în limite
+        const maxX = escapeZone.width / 2 - 100;
+        const maxY = escapeZone.height / 2 - 50;
+        
+        noBtnX = Math.max(-maxX, Math.min(maxX, noBtnX));
+        noBtnY = Math.max(-maxY, Math.min(maxY, noBtnY));
+        
+        updateNoBtnPosition();
+        
+        // Mișcare aleatorie suplimentară pentru a fi imprevizibil
+        if (dist < 150) {
+            noBtnX += (Math.random() - 0.5) * 100;
+            noBtnY += (Math.random() - 0.5) * 100;
+            updateNoBtnPosition();
         }
     }
 });
 
 // Butonul "Da" funcționează normal
-yesBtn.onclick = () => {
+document.getElementById("yes").onclick = () => {
     document.getElementById("first").classList.add("hidden");
     document.getElementById("second").classList.remove("hidden");
 };
 
-// Resetează poziția butonului "Nu" dacă iese prea mult
-function resetNoButton() {
-    const containerRect = buttonsContainer.getBoundingClientRect();
-    const btnRect = noBtn.getBoundingClientRect();
+// Resetează poziția periodic dacă iese prea mult
+setInterval(() => {
+    const maxX = escapeZone.width / 2 - 100;
+    const maxY = escapeZone.height / 2 - 50;
     
-    if (btnRect.left < containerRect.left || 
-        btnRect.right > containerRect.right ||
-        btnRect.top < containerRect.top || 
-        btnRect.bottom > containerRect.bottom) {
-        noBtn.style.transform = 'translate(0, 0)';
-        noBtn.style.left = '0px';
-        noBtn.style.top = '0px';
+    if (Math.abs(noBtnX) > maxX * 0.9 || Math.abs(noBtnY) > maxY * 0.9) {
+        noBtnX = 150;
+        noBtnY = 0;
+        updateNoBtnPosition();
     }
-}
+}, 2000);
 
-// Verifică periodic dacă butonul "Nu" a ieșit din limite
-setInterval(resetNoButton, 1000);
+// Initializează poziția
+updateNoBtnPosition();
+
+// Ascunde cursorul real pe tot documentul
+document.body.style.cursor = 'none';
+
+// Previne context menu
+document.addEventListener('contextmenu', (e) => {
+    if (e.target.id === 'no') {
+        e.preventDefault();
+        return false;
+    }
+});
 </script>
 
 </body>
