@@ -55,6 +55,7 @@
     #no {
         background: #ff4d6d;
         color: white;
+        cursor: not-allowed;
     }
 
     /* cursor fake hand */
@@ -90,7 +91,7 @@
 <body>
 
 <div class="container" id="first">
-    <h1>Vrei sa fii a mea Valentine anul acesta? 💙🤍</h1>
+    <h1>Vrei să-mi fii Valentine's anul acesta? 💙🤍</h1>
 
     <img class="gif" src="https://media1.tenor.com/m/SU5k1XOLwukAAAAd/cute-milk-and-mocha.gif">
 
@@ -114,35 +115,82 @@
 <script>
 const noBtn = document.getElementById("no");
 const hand = document.getElementById("hand");
+let isAvoiding = false;
+
+// Face butonul "Nu" complet inutil din punct de vedere al click-ului
+noBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    return false;
+});
+
+// Dezactivează toate event-urile mouse pentru butonul "Nu"
+noBtn.style.pointerEvents = 'none';
 
 document.addEventListener("mousemove", (e) => {
     const rect = noBtn.getBoundingClientRect();
-    const dist = Math.hypot(
-        e.clientX - (rect.left + rect.width/2),
-        e.clientY - (rect.top + rect.height/2)
-    );
-
-    if (dist < 120) {
+    const btnCenterX = rect.left + rect.width / 2;
+    const btnCenterY = rect.top + rect.height / 2;
+    
+    // Calculează distanța dintre cursor și centrul butonului
+    const dist = Math.hypot(e.clientX - btnCenterX, e.clientY - btnCenterY);
+    
+    // Dacă cursorul este aproape de butonul "Nu"
+    if (dist < 150) {
+        isAvoiding = true;
         hand.style.display = "block";
         hand.style.left = e.clientX + "px";
         hand.style.top = e.clientY + "px";
-
-        // trage mouse-ul virtual
-        window.scrollBy(
-            (Math.random() - 0.5) * 80,
-            (Math.random() - 0.5) * 80
-        );
+        
+        // Calculează direcția opusă față de buton
+        const angle = Math.atan2(e.clientY - btnCenterY, e.clientX - btnCenterX);
+        
+        // Mărește forța cu cât e mai aproape cursorul
+        const force = (150 - dist) / 2;
+        
+        // Mută cursorul în direcția opusă
+        const moveX = Math.cos(angle + Math.PI) * (force + Math.random() * 30);
+        const moveY = Math.sin(angle + Math.PI) * (force + Math.random() * 30);
+        
+        // Aplică mișcarea cursorului
+        window.scrollBy(moveX, moveY);
+        
+        // Încearcă să miști și mouse-ul virtual (doar pentru efect vizual)
+        hand.style.transform = `translate(${moveX}px, ${moveY}px)`;
+        
+        // Adaugă o mișcare suplimentară aleatorie
+        setTimeout(() => {
+            window.scrollBy(
+                (Math.random() - 0.5) * 50,
+                (Math.random() - 0.5) * 50
+            );
+        }, 10);
     } else {
+        isAvoiding = false;
         hand.style.display = "none";
+        hand.style.transform = 'translate(0, 0)';
     }
 });
 
+// Butonul "Da" funcționează normal
 document.getElementById("yes").onclick = () => {
     document.getElementById("first").classList.add("hidden");
     document.getElementById("second").classList.remove("hidden");
 };
+
+// Previne orice acțiune pe butonul "Nu"
+noBtn.addEventListener('mousedown', (e) => {
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    return false;
+});
+
+noBtn.addEventListener('mouseup', (e) => {
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    return false;
+});
 </script>
 
 </body>
 </html>
-
