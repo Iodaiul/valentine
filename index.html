@@ -16,7 +16,7 @@
         background: linear-gradient(135deg, #cce6ff, #ffffff);
         overflow: hidden;
         height: 100vh;
-        cursor: none !important;
+        cursor: none !important; /* Ascunde cursorul default */
     }
 
     .container {
@@ -137,43 +137,33 @@
         }
     }
 
-    /* Cursor jumătate albastru jumătate alb */
+    /* CUSTOM CURSOR CU IMAGINEA TA DE INIMA */
     .fake-cursor {
         position: fixed;
-        width: 50px;
-        height: 50px;
+        width: 60px; /* Dimensiune potrivită pentru imaginea ta */
+        height: 52px;
         pointer-events: none;
         z-index: 9999;
+        /* Centrare perfectă a cursorului pe vârful inimii */
         transform: translate(-50%, -50%);
-        border-radius: 50%;
-        overflow: hidden;
-        box-shadow: 0 0 10px rgba(0,0,0,0.3);
+        /* Folosește imaginea ta ca fundal */
+        background-image: url('https://i.ibb.co/hMs1k45S/Screenshot-20250114-104250.png');
+        /* Asigură că întreaga imagine este vizibilă și scalată corect */
+        background-size: contain;
+        background-repeat: no-repeat;
+        /* Elimină orice fundal în plus - crucial pentru forma de inimă! */
+        background-color: transparent !important;
+        /* Elimină orice bordură sau umbră veche */
+        border: none;
+        border-radius: 0;
+        box-shadow: none;
+        /* Asigură că elementul nu are conținut în plus */
+        overflow: visible;
     }
 
-    .cursor-left {
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 50%;
-        height: 100%;
-        background: #ffffff;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 24px;
-    }
-
-    .cursor-right {
-        position: absolute;
-        right: 0;
-        top: 0;
-        width: 50%;
-        height: 100%;
-        background: #4da6ff;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 24px;
+    /* Șterge div-urile vechi din cursor (jumătățile cu emoji-uri) */
+    .cursor-left, .cursor-right {
+        display: none;
     }
 </style>
 </head>
@@ -182,11 +172,8 @@
 <!-- Inimoare care cad - MAI PUTINE -->
 <div class="hearts-container" id="heartsContainer"></div>
 
-<!-- Cursor jumătate alb/jumătate albastru -->
-<div class="fake-cursor" id="fakeCursor">
-    <div class="cursor-left">🤍</div>
-    <div class="cursor-right">💙</div>
-</div>
+<!-- Cursorul personalizat cu inima ta -->
+<div class="fake-cursor" id="fakeCursor"></div>
 
 <div class="container" id="first">
     <h1>Vrei să-mi fii Valentine's anul acesta? 💙🤍</h1>
@@ -243,8 +230,8 @@ let noBtnY = 0;
 let isRunningAway = false;
 
 // LIMITE REDUSE CU 20%
-const maxMoveX = window.innerWidth * 0.32; // 40% -> 32% (reducere 20%)
-const maxMoveY = window.innerHeight * 0.24; // 30% -> 24% (reducere 20%)
+let maxMoveX = window.innerWidth * 0.32; // 40% -> 32% (reducere 20%)
+let maxMoveY = window.innerHeight * 0.24; // 30% -> 24% (reducere 20%)
 
 // Actualizează poziția butonului "Nu"
 function updateNoBtnPosition() {
@@ -276,7 +263,7 @@ document.addEventListener('mousemove', (e) => {
     mouseX = e.clientX;
     mouseY = e.clientY;
     
-    // Actualizează cursorul fals
+    // Actualizează cursorul fals (INIMA TA)
     fakeCursor.style.left = mouseX + 'px';
     fakeCursor.style.top = mouseY + 'px';
     
