@@ -28,6 +28,7 @@
         justify-content: center;
         text-align: center;
         position: relative;
+        z-index: 20;
     }
 
     h1 {
@@ -35,20 +36,24 @@
         color: #3b6cff;
         margin-bottom: 30px;
         padding: 0 20px;
-        z-index: 10;
+        z-index: 30;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
     }
 
     .gif {
         width: 300px;
         margin-bottom: 40px;
-        z-index: 10;
+        z-index: 30;
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
     }
 
     .buttons {
         display: flex;
         gap: 50px;
         position: relative;
-        z-index: 100;
+        z-index: 40;
+        min-height: 120px;
     }
 
     button {
@@ -57,21 +62,30 @@
         border-radius: 20px;
         border: none;
         position: relative;
-        transition: transform 0.05s linear !important;
-        z-index: 1000;
+        transition: all 0.05s linear !important;
+        z-index: 50;
+        font-weight: bold;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
     }
 
     #yes {
-        background: #4da6ff;
+        background: linear-gradient(45deg, #4da6ff, #3b6cff);
         color: white;
         cursor: pointer !important;
     }
 
+    #yes:hover {
+        transform: scale(1.05);
+        box-shadow: 0 8px 20px rgba(59, 108, 255, 0.3);
+    }
+
     #no {
-        background: #ff4d6d;
+        background: linear-gradient(45deg, #ff4d6d, #ff3366);
         color: white;
         position: absolute;
         cursor: not-allowed;
+        left: 150px;
+        top: 0;
     }
 
     .hidden {
@@ -81,57 +95,89 @@
     .second h2 {
         font-size: 3em;
         color: #3b6cff;
-        margin-bottom: 20px;
+        margin-bottom: 30px;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
     }
 
     .gifs-row {
         display: flex;
         gap: 40px;
-        margin-top: 20px;
+        margin-top: 30px;
+        z-index: 30;
     }
 
     .gifs-row img {
         width: 220px;
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    /* Inimoare care cad */
+    .hearts-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 10;
+    }
+
+    .heart {
+        position: absolute;
+        font-size: 24px;
+        opacity: 0.7;
+        animation: fall linear infinite;
+    }
+
+    @keyframes fall {
+        to {
+            transform: translateY(100vh) rotate(360deg);
+        }
     }
 
     /* Cursor fals */
     .fake-cursor {
         position: fixed;
-        width: 30px;
-        height: 30px;
-        background: url('https://cdn-icons-png.flaticon.com/512/5454/5454827.png') center/contain no-repeat;
+        width: 40px;
+        height: 40px;
+        background: url('https://cdn-icons-png.flaticon.com/512/1077/1077035.png') center/contain no-repeat;
         pointer-events: none;
         z-index: 9999;
         transform: translate(-50%, -50%);
+        filter: drop-shadow(2px 2px 3px rgba(0,0,0,0.3));
     }
 
-    /* Container limită pentru butonul "Nu" */
-    .escape-zone {
+    /* Zona de siguranță */
+    .safe-zone {
         position: absolute;
-        width: 80vw;
-        height: 60vh;
-        border: 2px dashed rgba(255, 77, 109, 0.3);
-        border-radius: 20px;
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        background: rgba(76, 175, 80, 0.1);
         pointer-events: none;
-        z-index: 1;
+        z-index: 25;
+        display: none;
     }
 </style>
 </head>
 <body>
 
+<!-- Inimoare care cad -->
+<div class="hearts-container" id="heartsContainer"></div>
+
 <!-- Cursor fals -->
-<div class="fake-cursor" id="fakeCursor"></div>
+<div class="fake-cursor" id="fakeCursor">💙</div>
 
 <div class="container" id="first">
-    <div class="escape-zone"></div>
-    
     <h1>Vrei să-mi fii Valentine's anul acesta? 💙🤍</h1>
 
     <img class="gif" src="https://media1.tenor.com/m/SU5k1XOLwukAAAAd/cute-milk-and-mocha.gif">
 
     <div class="buttons">
         <button id="yes">Da</button>
-        <!-- Butonul "Nu" este poziționat dinamic prin JS -->
+        <button id="no">Nu</button>
+        <div class="safe-zone" id="safeZone"></div>
     </div>
 </div>
 
@@ -145,29 +191,37 @@
 </div>
 
 <script>
-// Ascunde cursorul real și afișează cursorul fals
+// ========== INIMOARE CARE CAD ==========
+function createHearts() {
+    const heartsContainer = document.getElementById('heartsContainer');
+    const heartEmojis = ['💙', '🤍', '💘', '💝', '💖', '💗'];
+    
+    for (let i = 0; i < 50; i++) {
+        const heart = document.createElement('div');
+        heart.className = 'heart';
+        heart.textContent = heartEmojis[Math.floor(Math.random() * heartEmojis.length)];
+        heart.style.left = Math.random() * 100 + 'vw';
+        heart.style.fontSize = (Math.random() * 20 + 20) + 'px';
+        heart.style.opacity = Math.random() * 0.5 + 0.3;
+        heart.style.animationDuration = (Math.random() * 5 + 5) + 's';
+        heart.style.animationDelay = Math.random() * 5 + 's';
+        heartsContainer.appendChild(heart);
+    }
+}
+
+createHearts();
+
+// ========== BUTONUL CARE FUGĂ ==========
 const fakeCursor = document.getElementById('fakeCursor');
+const noBtn = document.getElementById('no');
+const yesBtn = document.getElementById('yes');
+const safeZone = document.getElementById('safeZone');
+
 let mouseX = window.innerWidth / 2;
 let mouseY = window.innerHeight / 2;
-
-// Crează butonul "Nu" dinamic
-const buttonsContainer = document.querySelector('.buttons');
-const noBtn = document.createElement('button');
-noBtn.id = 'no';
-noBtn.textContent = 'Nu';
-buttonsContainer.appendChild(noBtn);
-
-// Poziționează inițial butonul "Nu"
-let noBtnX = 150; // offset față de "Da"
+let noBtnX = 150; // Poziție inițială (lângă "Da")
 let noBtnY = 0;
-
-// Dimensiunile zonei de fugă
-const escapeZone = {
-    width: window.innerWidth * 0.8,
-    height: window.innerHeight * 0.6,
-    x: window.innerWidth * 0.1,
-    y: window.innerHeight * 0.2
-};
+let isRunningAway = false;
 
 // Actualizează poziția butonului "Nu"
 function updateNoBtnPosition() {
@@ -176,11 +230,10 @@ function updateNoBtnPosition() {
     noBtn.style.transform = `translate(${noBtnX}px, ${noBtnY}px)`;
 }
 
-// Blochează complet butonul "Nu"
+// Blochează butonul "Nu" complet
 noBtn.addEventListener('click', (e) => {
     e.preventDefault();
     e.stopImmediatePropagation();
-    e.stopPropagation();
     return false;
 });
 
@@ -196,84 +249,136 @@ noBtn.addEventListener('mouseup', (e) => {
     return false;
 });
 
-// Cursor fals care urmărește mouse-ul real
+// Cursor fals care urmărește mouse-ul
 document.addEventListener('mousemove', (e) => {
     mouseX = e.clientX;
     mouseY = e.clientY;
+    
+    // Actualizează cursorul fals
     fakeCursor.style.left = mouseX + 'px';
     fakeCursor.style.top = mouseY + 'px';
     
-    // Verifică dacă cursorul este aproape de butonul "Nu"
+    // Verifică distanța față de butonul "Nu"
     const btnRect = noBtn.getBoundingClientRect();
     const btnCenterX = btnRect.left + btnRect.width / 2;
     const btnCenterY = btnRect.top + btnRect.height / 2;
     
     const dist = Math.hypot(mouseX - btnCenterX, mouseY - btnCenterY);
     
-    // Dacă cursorul este prea aproape (250px), fuge!
-    if (dist < 250) {
-        // Calculează direcția de fugă
+    // Dacă cursorul este prea aproape (150px), fuge!
+    if (dist < 150) {
+        isRunningAway = true;
+        
+        // Calculează unghiul și distanța
         const angle = Math.atan2(mouseY - btnCenterY, mouseX - btnCenterX);
         
-        // Forță de respingere (mai mare cu cât e mai aproape)
-        const force = 350 - dist; // Valori mai mari = fuge mai departe
+        // Forță de fugă (mai mare cu cât e mai aproape)
+        const force = 200 - dist;
         
         // Mișcare în direcția opusă
-        const moveX = Math.cos(angle + Math.PI) * (force / 2);
-        const moveY = Math.sin(angle + Math.PI) * (force / 2);
+        const moveX = Math.cos(angle + Math.PI) * (force / 1.5);
+        const moveY = Math.sin(angle + Math.PI) * (force / 1.5);
         
         // Aplică mișcarea
         noBtnX += moveX;
         noBtnY += moveY;
         
-        // Ține butonul în limite
-        const maxX = escapeZone.width / 2 - 100;
-        const maxY = escapeZone.height / 2 - 50;
+        // Limite pentru a nu ieși prea mult
+        const maxX = window.innerWidth * 0.4;
+        const maxY = window.innerHeight * 0.3;
         
         noBtnX = Math.max(-maxX, Math.min(maxX, noBtnX));
         noBtnY = Math.max(-maxY, Math.min(maxY, noBtnY));
         
+        // Actualizează poziția
         updateNoBtnPosition();
         
-        // Mișcare aleatorie suplimentară pentru a fi imprevizibil
-        if (dist < 150) {
-            noBtnX += (Math.random() - 0.5) * 100;
-            noBtnY += (Math.random() - 0.5) * 100;
+        // Afișează zona de siguranță (efect vizual)
+        safeZone.style.display = 'block';
+        safeZone.style.left = (btnCenterX - 50) + 'px';
+        safeZone.style.top = (btnCenterY - 50) + 'px';
+        
+        // Mișcare aleatorie pentru a fi imprevizibil
+        if (dist < 100) {
+            noBtnX += (Math.random() - 0.5) * 80;
+            noBtnY += (Math.random() - 0.5) * 80;
             updateNoBtnPosition();
         }
+    } else {
+        isRunningAway = false;
+        safeZone.style.display = 'none';
     }
 });
 
 // Butonul "Da" funcționează normal
-document.getElementById("yes").onclick = () => {
+yesBtn.onclick = () => {
     document.getElementById("first").classList.add("hidden");
     document.getElementById("second").classList.remove("hidden");
+    
+    // Adaugă și mai multe inimoare când dă click pe "Da"
+    for (let i = 0; i < 30; i++) {
+        setTimeout(() => {
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            heart.textContent = '💙';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.fontSize = '30px';
+            heart.style.opacity = '0.8';
+            heart.style.animationDuration = '3s';
+            document.getElementById('heartsContainer').appendChild(heart);
+            
+            // Șterge inima după ce cade
+            setTimeout(() => heart.remove(), 3000);
+        }, i * 100);
+    }
 };
 
-// Resetează poziția periodic dacă iese prea mult
+// Resetează poziția butonului "Nu" dacă iese prea mult
 setInterval(() => {
-    const maxX = escapeZone.width / 2 - 100;
-    const maxY = escapeZone.height / 2 - 50;
+    const maxX = window.innerWidth * 0.4;
+    const maxY = window.innerHeight * 0.3;
     
     if (Math.abs(noBtnX) > maxX * 0.9 || Math.abs(noBtnY) > maxY * 0.9) {
         noBtnX = 150;
         noBtnY = 0;
         updateNoBtnPosition();
     }
+}, 3000);
+
+// Animație buton "Nu" pentru a atrage atenția
+setInterval(() => {
+    if (!isRunningAway) {
+        noBtn.style.transform = `translate(${noBtnX}px, ${noBtnY}px) scale(1.05)`;
+        setTimeout(() => {
+            noBtn.style.transform = `translate(${noBtnX}px, ${noBtnY}px) scale(1)`;
+        }, 300);
+    }
 }, 2000);
 
 // Initializează poziția
 updateNoBtnPosition();
 
-// Ascunde cursorul real pe tot documentul
+// Ascunde cursorul real
 document.body.style.cursor = 'none';
 
-// Previne context menu
+// Previne meniul contextual pe butonul "Nu"
 document.addEventListener('contextmenu', (e) => {
     if (e.target.id === 'no') {
         e.preventDefault();
         return false;
     }
+});
+
+// Resize handler
+window.addEventListener('resize', () => {
+    // Repozitionează butonul "Nu" la redimensionare
+    const maxX = window.innerWidth * 0.4;
+    const maxY = window.innerHeight * 0.3;
+    
+    noBtnX = Math.max(-maxX, Math.min(maxX, noBtnX));
+    noBtnY = Math.max(-maxY, Math.min(maxY, noBtnY));
+    
+    updateNoBtnPosition();
 });
 </script>
 
