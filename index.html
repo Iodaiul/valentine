@@ -3,359 +3,183 @@
 <head>
 <meta charset="UTF-8">
 <title>Valentine 💙🤍</title>
+
 <style>
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        user-select: none;
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    user-select:none;
+}
+
+body{
+    font-family:'Comic Sans MS',cursive;
+    background:linear-gradient(135deg,#cce6ff,#ffffff);
+    overflow:hidden;
+    height:100vh;
+    cursor:none;
+}
+
+/* ================= CONTAINER ================= */
+.container{
+    width:100%;
+    height:100%;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    position:relative;
+    z-index:20;
+}
+
+h1{
+    font-size:3em;
+    color:#3b6cff;
+    margin-bottom:30px;
+    text-shadow:2px 2px 4px rgba(0,0,0,0.1);
+}
+
+.gif{
+    width:300px;
+    margin-bottom:40px;
+    border-radius:15px;
+    box-shadow:0 5px 15px rgba(0,0,0,0.1);
+}
+
+.buttons{
+    display:flex;
+    gap:50px;
+    position:relative;
+    min-height:120px;
+}
+
+button{
+    font-size:2.5em;
+    padding:20px 50px;
+    border-radius:20px;
+    border:none;
+    font-weight:bold;
+    box-shadow:0 5px 15px rgba(0,0,0,0.2);
+}
+
+#yes{
+    background:linear-gradient(45deg,#4da6ff,#3b6cff);
+    color:white;
+    cursor:pointer;
+}
+
+#no{
+    background:linear-gradient(45deg,#ff4d6d,#ff3366);
+    color:white;
+    position:absolute;
+    left:150px;
+    top:0;
+    cursor:not-allowed;
+}
+
+/* ================= INIMOARE ================= */
+.hearts-container{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    pointer-events:none;
+    z-index:5;
+}
+
+.heart{
+    position:absolute;
+    font-size:24px;
+    opacity:.6;
+    animation:fall linear infinite;
+}
+
+@keyframes fall{
+    to{
+        transform:translateY(100vh) rotate(360deg);
     }
+}
 
-    body {
-        font-family: 'Comic Sans MS', cursive;
-        background: linear-gradient(135deg, #cce6ff, #ffffff);
-        overflow: hidden;
-        height: 100vh;
-        cursor: none !important;
-    }
+/* ================= CURSOR INIMĂ ================= */
+.fake-cursor{
+    position:fixed;
+    width:80px;
+    height:75px;
+    pointer-events:none;
+    z-index:9999;
+    transform:translate(-50%,-50%);
 
-    .container {
-        width: 100%;
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        position: relative;
-        z-index: 20;
-    }
+    background-image:url("image.webp"); /* poza ta */
+    background-size:cover;
+    background-position:center;
+    background-repeat:no-repeat;
 
-    h1 {
-        font-size: 3em;
-        color: #3b6cff;
-        margin-bottom: 30px;
-        padding: 0 20px;
-        z-index: 30;
-        text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-    }
+    /* mască de inimă */
+    -webkit-mask-image:url("https://upload.wikimedia.org/wikipedia/commons/4/49/Heart_corazón.svg");
+    -webkit-mask-size:contain;
+    -webkit-mask-repeat:no-repeat;
+    -webkit-mask-position:center;
 
-    .gif {
-        width: 300px;
-        margin-bottom: 40px;
-        z-index: 30;
-        border-radius: 15px;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-    }
-
-    .buttons {
-        display: flex;
-        gap: 50px;
-        position: relative;
-        z-index: 40;
-        min-height: 120px;
-    }
-
-    button {
-        font-size: 2.5em;
-        padding: 20px 50px;
-        border-radius: 20px;
-        border: none;
-        position: relative;
-        transition: all 0.05s linear !important;
-        z-index: 50;
-        font-weight: bold;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-    }
-
-    #yes {
-        background: linear-gradient(45deg, #4da6ff, #3b6cff);
-        color: white;
-        cursor: pointer !important;
-    }
-
-    #yes:hover {
-        transform: scale(1.05);
-        box-shadow: 0 8px 20px rgba(59, 108, 255, 0.3);
-    }
-
-    #no {
-        background: linear-gradient(45deg, #ff4d6d, #ff3366);
-        color: white;
-        position: absolute;
-        cursor: not-allowed;
-        left: 150px;
-        top: 0;
-    }
-
-    .hidden {
-        display: none !important;
-    }
-
-    .second h2 {
-        font-size: 3em;
-        color: #3b6cff;
-        margin-bottom: 30px;
-        text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-    }
-
-    .gifs-row {
-        display: flex;
-        gap: 40px;
-        margin-top: 30px;
-        z-index: 30;
-    }
-
-    .gifs-row img {
-        width: 220px;
-        border-radius: 15px;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-    }
-
-    /* Inimoare care cad - MAI PUTINE */
-    .hearts-container {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        pointer-events: none;
-        z-index: 10;
-    }
-
-    .heart {
-        position: absolute;
-        font-size: 24px;
-        opacity: 0.6;
-        animation: fall linear infinite;
-        filter: drop-shadow(1px 1px 2px rgba(0,0,0,0.2));
-    }
-
-    @keyframes fall {
-        to {
-            transform: translateY(100vh) rotate(360deg);
-        }
-    }
-
-    /* CUSTOM CURSOR CU POZA TA LOCALĂ */
-    .fake-cursor {
-    position: fixed;
-    width: 80px;
-    height: 75px;
-    pointer-events: none;
-    z-index: 9999;
-    transform: translate(-50%, -50%);
-
-    /* Imaginea ta */
-    background-image: url('file:///C:/Users/Iodaiul/Desktop/image.webp');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-
-    /* TĂIEREA ÎN FORMĂ DE INIMĂ */
-    -webkit-mask-image: url("https://upload.wikimedia.org/wikipedia/commons/4/49/Heart_corazón.svg");
-    -webkit-mask-size: contain;
-    -webkit-mask-repeat: no-repeat;
-    -webkit-mask-position: center;
-
-    mask-image: url("https://upload.wikimedia.org/wikipedia/commons/4/49/Heart_corazón.svg");
-    mask-size: contain;
-    mask-repeat: no-repeat;
-    mask-position: center;
-
-    background-color: transparent;
+    mask-image:url("https://upload.wikimedia.org/wikipedia/commons/4/49/Heart_corazón.svg");
+    mask-size:contain;
+    mask-repeat:no-repeat;
+    mask-position:center;
 }
 </style>
 </head>
+
 <body>
 
-<!-- Inimoare care cad - MAI PUTINE -->
 <div class="hearts-container" id="heartsContainer"></div>
-
-<!-- Cursorul personalizat cu inima ta -->
 <div class="fake-cursor" id="fakeCursor"></div>
 
 <div class="container" id="first">
     <h1>Vrei să-mi fii Valentine's anul acesta? 💙🤍</h1>
-
     <img class="gif" src="https://media1.tenor.com/m/SU5k1XOLwukAAAAd/cute-milk-and-mocha.gif">
-
     <div class="buttons">
         <button id="yes">Da</button>
         <button id="no">Nu</button>
     </div>
 </div>
 
-<div class="container second hidden" id="second">
-    <h2>Încă te plac mult Adelina, tu ce simți? 🤍💙</h2>
-
-    <div class="gifs-row">
-        <img src="https://media1.tenor.com/m/1nIDXbABxgsAAAAd/gif-gifkk.gif">
-        <img src="https://media1.tenor.com/m/DDRz38sfMSIAAAAd/milk-mocha-bear.gif">
-    </div>
-</div>
-
 <script>
-// ========== INIMOARE CARE CAD (MAI PUTINE, DOAR ALB și ALBASTRU) ==========
-function createHearts() {
-    const heartsContainer = document.getElementById('heartsContainer');
-    const heartEmojis = ['💙', '🤍'];
-    
-    for (let i = 0; i < 25; i++) {
-        const heart = document.createElement('div');
-        heart.className = 'heart';
-        heart.textContent = heartEmojis[Math.floor(Math.random() * heartEmojis.length)];
-        heart.style.left = Math.random() * 100 + 'vw';
-        heart.style.fontSize = (Math.random() * 15 + 20) + 'px';
-        heart.style.opacity = Math.random() * 0.4 + 0.3;
-        heart.style.animationDuration = (Math.random() * 6 + 4) + 's';
-        heart.style.animationDelay = Math.random() * 3 + 's';
-        heartsContainer.appendChild(heart);
-    }
+const heartsContainer = document.getElementById("heartsContainer");
+for(let i=0;i<25;i++){
+    const h=document.createElement("div");
+    h.className="heart";
+    h.textContent=Math.random()>0.5?"💙":"🤍";
+    h.style.left=Math.random()*100+"vw";
+    h.style.fontSize=(20+Math.random()*15)+"px";
+    h.style.animationDuration=(4+Math.random()*6)+"s";
+    heartsContainer.appendChild(h);
 }
 
-createHearts();
-
-// ========== BUTONUL CARE FUGĂ (LIMITAT) ==========
-const fakeCursor = document.getElementById('fakeCursor');
-const noBtn = document.getElementById('no');
-const yesBtn = document.getElementById('yes');
-
-let mouseX = window.innerWidth / 2;
-let mouseY = window.innerHeight / 2;
-let noBtnX = 150;
-let noBtnY = 0;
-let isRunningAway = false;
-
-let maxMoveX = window.innerWidth * 0.32;
-let maxMoveY = window.innerHeight * 0.24;
-
-function updateNoBtnPosition() {
-    noBtn.style.left = `${noBtnX}px`;
-    noBtn.style.top = `${noBtnY}px`;
-}
-
-noBtn.addEventListener('click', (e) => {
-    e.preventDefault();
-    e.stopImmediatePropagation();
-    return false;
+/* cursor */
+const fakeCursor=document.getElementById("fakeCursor");
+document.addEventListener("mousemove",e=>{
+    fakeCursor.style.left=e.clientX+"px";
+    fakeCursor.style.top=e.clientY+"px";
 });
 
-noBtn.addEventListener('mousedown', (e) => {
-    e.preventDefault();
-    e.stopImmediatePropagation();
-    return false;
-});
+/* butonul care fuge */
+const noBtn=document.getElementById("no");
+let x=150,y=0;
 
-noBtn.addEventListener('mouseup', (e) => {
-    e.preventDefault();
-    e.stopImmediatePropagation();
-    return false;
-});
+document.addEventListener("mousemove",e=>{
+    const r=noBtn.getBoundingClientRect();
+    const cx=r.left+r.width/2;
+    const cy=r.top+r.height/2;
+    const d=Math.hypot(e.clientX-cx,e.clientY-cy);
 
-document.addEventListener('mousemove', (e) => {
-    mouseX = e.clientX;
-    mouseY = e.clientY;
-    
-    fakeCursor.style.left = mouseX + 'px';
-    fakeCursor.style.top = mouseY + 'px';
-    
-    const btnRect = noBtn.getBoundingClientRect();
-    const btnCenterX = btnRect.left + btnRect.width / 2;
-    const btnCenterY = btnRect.top + btnRect.height / 2;
-    
-    const dist = Math.hypot(mouseX - btnCenterX, mouseY - btnCenterY);
-    
-    if (dist < 130) {
-        isRunningAway = true;
-        
-        const angle = Math.atan2(mouseY - btnCenterY, mouseX - btnCenterX);
-        const force = 180 - dist;
-        
-        const moveX = Math.cos(angle + Math.PI) * (force / 2);
-        const moveY = Math.sin(angle + Math.PI) * (force / 2);
-        
-        noBtnX += moveX;
-        noBtnY += moveY;
-        
-        noBtnX = Math.max(-maxMoveX, Math.min(maxMoveX, noBtnX));
-        noBtnY = Math.max(-maxMoveY, Math.min(maxMoveY, noBtnY));
-        
-        updateNoBtnPosition();
-        
-        if (dist < 90) {
-            noBtnX += (Math.random() - 0.5) * 60;
-            noBtnY += (Math.random() - 0.5) * 60;
-            
-            noBtnX = Math.max(-maxMoveX, Math.min(maxMoveX, noBtnX));
-            noBtnY = Math.max(-maxMoveY, Math.min(maxMoveY, noBtnY));
-            
-            updateNoBtnPosition();
-        }
-    } else {
-        isRunningAway = false;
+    if(d<120){
+        const a=Math.atan2(cy-e.clientY,cx-e.clientX);
+        x+=Math.cos(a)*40;
+        y+=Math.sin(a)*40;
+        noBtn.style.left=x+"px";
+        noBtn.style.top=y+"px";
     }
-});
-
-yesBtn.onclick = () => {
-    document.getElementById("first").classList.add("hidden");
-    document.getElementById("second").classList.remove("hidden");
-    
-    for (let i = 0; i < 15; i++) {
-        setTimeout(() => {
-            const heart = document.createElement('div');
-            heart.className = 'heart';
-            heart.textContent = Math.random() > 0.5 ? '💙' : '🤍';
-            heart.style.left = Math.random() * 100 + 'vw';
-            heart.style.fontSize = '28px';
-            heart.style.opacity = '0.7';
-            heart.style.animationDuration = '4s';
-            document.getElementById('heartsContainer').appendChild(heart);
-            
-            setTimeout(() => heart.remove(), 4000);
-        }, i * 150);
-    }
-};
-
-setInterval(() => {
-    const thresholdX = maxMoveX * 0.85;
-    const thresholdY = maxMoveY * 0.85;
-    
-    if (Math.abs(noBtnX) > thresholdX || Math.abs(noBtnY) > thresholdY) {
-        noBtnX *= 0.7;
-        noBtnY *= 0.7;
-        updateNoBtnPosition();
-    }
-}, 2000);
-
-setInterval(() => {
-    if (!isRunningAway) {
-        noBtn.style.transform = 'scale(1.02)';
-        setTimeout(() => {
-            noBtn.style.transform = 'scale(1)';
-        }, 200);
-    }
-}, 3000);
-
-updateNoBtnPosition();
-
-document.body.style.cursor = 'none';
-
-document.addEventListener('contextmenu', (e) => {
-    if (e.target.id === 'no') {
-        e.preventDefault();
-        return false;
-    }
-});
-
-window.addEventListener('resize', () => {
-    maxMoveX = window.innerWidth * 0.32;
-    maxMoveY = window.innerHeight * 0.24;
-    
-    noBtnX = Math.max(-maxMoveX, Math.min(maxMoveX, noBtnX));
-    noBtnY = Math.max(-maxMoveY, Math.min(maxMoveY, noBtnY));
-    
-    updateNoBtnPosition();
 });
 </script>
 
